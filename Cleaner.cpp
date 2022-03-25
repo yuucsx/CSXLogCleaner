@@ -23,5 +23,6 @@ int main()
 	std::system("cls");
 	std::cout << "Done. HF" << std::endl << "Made by: .Yuu#0001" << std::endl;
 	system("PAUSE");
+	system("color 09");
 	return 0;
 }
