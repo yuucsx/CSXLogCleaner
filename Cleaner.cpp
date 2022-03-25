@@ -24,5 +24,4 @@ int main()
 	std::cout << "Done. HF" << std::endl << "Made by: .Yuu#0001" << std::endl;
 	system("PAUSE");
 	return 0;
-	teste
 }
