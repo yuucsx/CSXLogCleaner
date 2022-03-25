@@ -6,7 +6,8 @@ int main()
 	//std::system("rmdir C:\\Users\\yukki\\AppData\\Local\\Riot Games\\League of Legends\\Logs");
 	//return 0;
 
-	std::cout << "Voce esta executando o log cleaner de arquivos do lol:" << std::endl;
+	system("color 09");
+	std::cout << "Detailed automatic league log cleaner." << std::endl << "make sure your league is installed on disk C:, and your league client is closed." << std::endl << "press any button to run" << std::endl;
 	system("PAUSE");
 	std::system("rd /s /q \"%userprofile%\\AppData\\Local\\Riot Games\"");
 	std::system("rd /s /q \"C:\\Riot Games\\League of Legends\\Config\\Champions\"");
@@ -20,6 +21,7 @@ int main()
 	std::system("del \"C:\\Riot Games\\League of Legends\\Config\\LeagueClientSettings.yaml\" /f /q");
 	std::system("del \"C:\\Riot Games\\League of Legends\\Config\\PerksPreferences.yaml\" /f /q");
 	std::system("cls");
-	std::cout << "Seus arquivos foram limpos." << std::endl;
+	std::cout << "Done. HF" << std::endl << "Made by: .Yuu#0001" << std::endl;
+	system("PAUSE");
 	return 0;
 }
