@@ -6,9 +6,6 @@
 
 int main()
 {
-	//std::system("rmdir C:\\Users\\yukki\\AppData\\Local\\Riot Games\\League of Legends\\Logs");
-	//return 0;
-
 	system("color 09");
 	std::cout << "Detailed automatic league log cleaner." << std::endl << "make sure your league is installed on disk C:, and your league client is closed." << std::endl << "press any button to run" << std::endl;
 	system("PAUSE");
