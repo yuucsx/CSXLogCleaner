@@ -1,5 +1,8 @@
 #include <iostream>
 #include <filesystem>
+#include <Windows.h>
+#include <chrono> //sleep
+#include <thread> //sleep
 
 int main()
 {
@@ -9,6 +12,9 @@ int main()
 	system("color 09");
 	std::cout << "Detailed automatic league log cleaner." << std::endl << "make sure your league is installed on disk C:, and your league client is closed." << std::endl << "press any button to run" << std::endl;
 	system("PAUSE");
+	std::system("taskkill -f -im riot*");
+	std::system("taskkill -f -im league*");
+	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 	std::system("rd /s /q \"%userprofile%\\AppData\\Local\\Riot Games\"");
 	std::system("rd /s /q \"C:\\Riot Games\\League of Legends\\Config\\Champions\"");
 	std::system("rd /s /q \"C:\\Riot Games\\League of Legends\\Config\\Global\"");
