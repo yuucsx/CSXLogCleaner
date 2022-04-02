@@ -7,7 +7,7 @@
 int main()
 {
 	system("color 09");
-	std::cout << "Detailed automatic league log cleaner." << std::endl << "make sure your league is installed on disk C:, and your league client is closed." << std::endl << "press any button to run" << std::endl;
+	std::cout << "Log Cleaner for Riot League of Legends to prevent automatic hwid bans." << std::endl << "press any button to run" << std::endl;
 	system("PAUSE");
 	std::system("taskkill -f -im riot*");
 	std::system("taskkill -f -im league*");
