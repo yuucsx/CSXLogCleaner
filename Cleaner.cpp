@@ -3,6 +3,8 @@
 #include <Windows.h>
 #include <chrono> //sleep
 #include <thread> //sleep
+#include <string>
+
 
 int main()
 {
@@ -25,6 +27,7 @@ int main()
 	std::system("taskkill -f -im riot*");
 	std::system("taskkill -f -im league*");
 	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+	std::system("cls");
 	std::cout << "[-] Deleting all Riot/League logs..." << std::endl;
 	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 	std::system("rd /s /q \"%userprofile%\\AppData\\Local\\Riot Games\"");
@@ -38,6 +41,7 @@ int main()
 	std::system("del \"C:\\Riot Games\\League of Legends\\Config\\LCULocalPreferences.yaml\" /f /q");
 	std::system("del \"C:\\Riot Games\\League of Legends\\Config\\LeagueClientSettings.yaml\" /f /q");
 	std::system("del \"C:\\Riot Games\\League of Legends\\Config\\PerksPreferences.yaml\" /f /q");
+	std::system("del \"C:\\Users\\%username%\\AppData\\Local\\Riot Games\Riot Client\Logs\" /f /q");
 	std::system("cls");
 	std::cout << "[+] Done. HF" << std::endl;
 	system("PAUSE");
