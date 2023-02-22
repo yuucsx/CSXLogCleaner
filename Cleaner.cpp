@@ -24,7 +24,7 @@ int main()
 
 		char oper;
 		std::cout << "Log Cleaner for Riot League of Legends to prevent automatic hwid bans." << std::endl;
-		std::cout << "Choose your Disk with League: (C, D, E, F): ";
+		std::cout << "Choose your Disk with League: (C, D, E, F, G): ";
 		std::cin >> oper;
 
 		switch (oper) {
@@ -151,6 +151,38 @@ int main()
 			std::system("del \"F:\\Riot Games\\Riot Client\\UX\\natives_blob.bin\" /f /q");
 			std::system("del \"F:\\Riot Games\\Riot Client\\UX\\icudtl.dat\" /f /q");
 			std::system("del \"F:\\Riot Games\\Riot Client\\UX\\Plugins\\plugin-manifest.json\" /f /q");
+			std::system("cls");
+			std::cout << "[+] Done. HF" << std::endl;
+			system("PAUSE");
+			break;
+		case 'g':
+		case 'G':
+			std::cout << "[-] Stopping all Riot Games processes..." << std::endl;
+			std::system("taskkill -f -im League*");
+			std::system("taskkill -f -im LeagueClient*");
+			std::system("taskkill -f -im RiotClientServices*");
+			std::system("taskkill -f -im riot*");
+			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+			std::system("cls");
+			std::cout << "[-] Deleting all Riot/League logs..." << std::endl;
+			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+			std::system("rd /s /q \"%userprofile%\\AppData\\Local\\Riot Games\"");
+			std::system("rd /s /q \"G:\\ProgramData\\Riot Games\"");
+			std::system("rd /s /q \"C:\\ProgramData\\Riot Games\"");
+			std::system("rd /s /q \"G:\\Riot Games\\League of Legends\\Config\\Champions\"");
+			std::system("rd /s /q \"G:\\Riot Games\\League of Legends\\Config\\Global\"");
+			std::system("rd /s /q \"G:\\Riot Games\\League of Legends\\Logs\"");
+			std::system("del \"G:\\ProgramData\\Riot Games\\machine.cfg\" /f /q");
+			std::system("del \"G:\\Riot Games\\League of Legends\\Config\\input.ini\" /f /q");
+			std::system("del \"G:\\Riot Games\\League of Legends\\Config\\ItemSets.json\" /f /q");
+			std::system("del \"G:\\Riot Games\\League of Legends\\Config\\LCUAccountPreferences.yaml\" /f /q");
+			std::system("del \"G:\\Riot Games\\League of Legends\\Config\\LCULocalPreferences.yaml\" /f /q");
+			std::system("del \"G:\\Riot Games\\League of Legends\\Config\\LeagueClientSettings.yaml\" /f /q");
+			std::system("del \"G:\\Riot Games\\League of Legends\\Config\\PerksPreferences.yaml\" /f /q");
+			std::system("del \"G:\\Riot Games\\League of Legends\\debug.log\" /f /q");
+			std::system("del \"G:\\Riot Games\\Riot Client\\UX\\natives_blob.bin\" /f /q");
+			std::system("del \"G:\\Riot Games\\Riot Client\\UX\\icudtl.dat\" /f /q");
+			std::system("del \"G:\\Riot Games\\Riot Client\\UX\\Plugins\\plugin-manifest.json\" /f /q");
 			std::system("cls");
 			std::cout << "[+] Done. HF" << std::endl;
 			system("PAUSE");
