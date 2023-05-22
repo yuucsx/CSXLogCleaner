@@ -1,53 +1,69 @@
 #include <iostream>
 #include <filesystem>
-#include <Windows.h>
-#include <chrono> //sleep
-#include <thread> //sleep
+#include <chrono>
+#include <thread>
 #include <string>
+#include <algorithm>
+#include <vector>
 
-const std::string LOG_PATH = "%userprofile%\\AppData\\Local\\Riot Games";
-const std::string PROGRAM_DATA_PATH = "ProgramData\\Riot Games";
-const std::string CONFIG_CHAMPION_PATH = "Riot Games\\League of Legends\\Config\\Champions";
-const std::string CONFIG_GLOBAL_PATH = "Riot Games\\League of Legends\\Config\\Global";
-const std::string LOGS_PATH = "Riot Games\\League of Legends\\Logs";
-const std::string MACHINE_CFG_PATH = "ProgramData\\Riot Games\\machine.cfg";
-const std::string INPUT_INI_PATH = "Riot Games\\League of Legends\\Config\\input.ini";
-const std::string ITEMSET_JSON_PATH = "Riot Games\\League of Legends\\Config\\ItemSets.json";
-const std::string LCU_ACCOUNT_PATH = "Riot Games\\League of Legends\\Config\\LCUAccountPreferences.yaml";
-const std::string LCU_LOCAL_PATH = "Riot Games\\League of Legends\\Config\\LCULocalPreferences.yaml";
-const std::string LEAGUE_CLIENT_SETTINGS_PATH = "Riot Games\\League of Legends\\Config\\LeagueClientSettings.yaml";
-const std::string PERKS_PATH = "Riot Games\\League of Legends\\Config\\PerksPreferences.yaml";
-const std::string DEBUG_LOG_PATH = "Riot Games\\League of Legends\\debug.log";
-const std::string NATIVE_BLOB_PATH = "Riot Games\\Riot Client\\UX\\natives_blob.bin";
-const std::string ICUDTL_PATH = "Riot Games\\Riot Client\\UX\\icudtl.dat";
-const std::string PLUGIN_MANIFEST_PATH = "Riot Games\\Riot Client\\UX\\Plugins\\plugin-manifest.json";
+// Constants for file paths
+const std::vector<std::string> PATHS = {
+	"%userprofile%\\AppData\\Local\\Riot Games",
+	"ProgramData\\Riot Games",
+	"Riot Games\\League of Legends\\Config\\Champions",
+	"Riot Games\\League of Legends\\Config\\Global",
+	"Riot Games\\League of Legends\\Logs",
+	"ProgramData\\Riot Games\\machine.cfg",
+	"Riot Games\\League of Legends\\Config\\input.ini",
+	"Riot Games\\League of Legends\\Config\\ItemSets.json",
+	"Riot Games\\League of Legends\\Config\\LCUAccountPreferences.yaml",
+	"Riot Games\\League of Legends\\Config\\LCULocalPreferences.yaml",
+	"Riot Games\\League of Legends\\Config\\LeagueClientSettings.yaml",
+	"Riot Games\\League of Legends\\Config\\PerksPreferences.yaml",
+	"Riot Games\\League of Legends\\debug.log",
+	"Riot Games\\Riot Client\\UX\\natives_blob.bin",
+	"Riot Games\\Riot Client\\UX\\snapshot_blob.bin",
+	"Riot Games\\Riot Client\\UX\\v8_context_snapshot.bin",
+	"Riot Games\\Riot Client\\UX\\icudtl.dat",
+	"Riot Games\\Riot Client\\UX\\Plugins\\plugin-manifest.json"
+};
+
+void stopProcesses() {
+	std::vector<std::string> processes = {
+		"League*", "LeagueClient*", "RiotClientServices*", "riot*"
+	};
+
+	std::cout << "[-] Stopping Riot Games & League of Legends processes..." << std::endl;
+	for (const auto& process : processes) {
+		std::string command = "taskkill /F /IM " + process;
+		std::system(command.c_str());
+	}
+
+	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+}
 
 void cleanLogs(const std::string& diskLetter) {
-	std::cout << "[-] Stopping all Riot Games processes..." << std::endl;
-	std::system("taskkill -f -im League*");
-	std::system("taskkill -f -im LeagueClient*");
-	std::system("taskkill -f -im RiotClientServices*");
-	std::system("taskkill -f -im riot*");
-	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+	// Normalize diskLetter to uppercase
+	std::string normalizedDiskLetter = diskLetter;
+	std::transform(normalizedDiskLetter.begin(), normalizedDiskLetter.end(), normalizedDiskLetter.begin(), ::toupper);
+
+	stopProcesses();
 	std::system("cls");
 	std::cout << "[-] Deleting all Riot/League logs..." << std::endl;
 	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-	std::system(("rd /s /q \"" + LOG_PATH + "\"").c_str());
-	std::system(("rd /s /q \"" + diskLetter + ":\\" + PROGRAM_DATA_PATH + "\"").c_str());
-	std::system(("rd /s /q \"" + diskLetter + ":\\" + CONFIG_CHAMPION_PATH + "\"").c_str());
-	std::system(("rd /s /q \"" + diskLetter + ":\\" + CONFIG_GLOBAL_PATH + "\"").c_str());
-	std::system(("rd /s /q \"" + diskLetter + ":\\" + LOGS_PATH + "\"").c_str());
-	std::system(("del \"" + diskLetter + ":\\" + MACHINE_CFG_PATH + "\" /f /q").c_str());
-	std::system(("del \"" + diskLetter + ":\\" + INPUT_INI_PATH + "\" /f /q").c_str());
-	std::system(("del \"" + diskLetter + ":\\" + ITEMSET_JSON_PATH + "\" /f /q").c_str());
-	std::system(("del \"" + diskLetter + ":\\" + LCU_ACCOUNT_PATH + "\" /f /q").c_str());
-	std::system(("del \"" + diskLetter + ":\\" + LCU_LOCAL_PATH + "\" /f /q").c_str());
-	std::system(("del \"" + diskLetter + ":\\" + LEAGUE_CLIENT_SETTINGS_PATH + "\" /f /q").c_str());
-	std::system(("del \"" + diskLetter + ":\\" + PERKS_PATH + "\" /f /q").c_str());
-	std::system(("del \"" + diskLetter + ":\\" + DEBUG_LOG_PATH + "\" /f /q").c_str());
-	std::system(("del \"" + diskLetter + ":\\" + NATIVE_BLOB_PATH + "\" /f /q").c_str());
-	std::system(("del \"" + diskLetter + ":\\" + ICUDTL_PATH + "\" /f /q").c_str());
-	std::system(("del \"" + diskLetter + ":\\" + PLUGIN_MANIFEST_PATH + "\" /f /q").c_str());
+
+	for (const auto& path : PATHS) {
+		std::string fullPath = normalizedDiskLetter + ":\\" + path;
+		if (std::filesystem::exists(fullPath)) {
+			if (std::filesystem::is_directory(fullPath)) {
+				std::system(("rd /s /q \"" + fullPath + "\"").c_str());
+			}
+			else {
+				std::system(("del \"" + fullPath + "\" /f /q").c_str());
+			}
+		}
+	}
+
 	std::system("cls");
 	std::cout << "[+] Done. HF" << std::endl;
 }
@@ -70,29 +86,20 @@ int main()
 
 	char oper;
 	std::cout << "Log Cleaner for Riot League of Legends to prevent automatic hwid bans." << std::endl;
-	std::cout << "Choose your Disk with League: (C, D, E, F, G): ";
+	std::cout << "Choose your Disk with League: ";
 	std::cin >> oper;
 	std::string diskLetter = std::string(1, oper);
 
-	switch (oper) {
-	case 'c':
-	case 'C':
-	case 'd':
-	case 'D':
-	case 'e':
-	case 'E':
-	case 'f':
-	case 'F':
-	case 'g':
-	case 'G':
+	// Check if the disk letter is alphabetic and convert to uppercase
+	if (std::isalpha(oper)) {
+		diskLetter = std::toupper(oper);
 		cleanLogs(diskLetter);
 		system("PAUSE");
-		break;
-
-	default:
-		std::cout << "I'm sorry I'm not support this disk yet =( '\n'";
-		system("PAUSE");
-		break;
 	}
+	else {
+		std::cout << "Invalid disk letter. Please enter a letter (A-Z)." << std::endl;
+		system("PAUSE");
+	}
+
 	return 0;
 }
