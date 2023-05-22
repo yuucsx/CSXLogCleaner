@@ -86,7 +86,7 @@ int main()
 
 	char oper;
 	std::cout << "Log Cleaner for Riot League of Legends to prevent automatic hwid bans." << std::endl;
-	std::cout << "Choose your Disk with League: ";
+	std::cout << "Type your Disk with League (A-Z):";
 	std::cin >> oper;
 	std::string diskLetter = std::string(1, oper);
 
