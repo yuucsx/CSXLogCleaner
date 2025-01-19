@@ -25,6 +25,19 @@ std::string expandEnvironmentVariables(const std::string& str) {
     return std::string(expanded);
 }
 
+std::vector<std::string> getAvailableDrives() {
+    std::vector<std::string> drives;
+    DWORD drivesMask = GetLogicalDrives();
+
+    for (int i = 0; i < 26; ++i) {
+        if (drivesMask & (1 << i)) {
+            drives.push_back(std::string(1, 'A' + i));
+        }
+    }
+
+    return drives;
+}
+
 const std::vector<std::string> PATHS = {
     "%userprofile%\\AppData\\Local\\Riot Games",
     "%ProgramData%\\Riot Games",
@@ -42,9 +55,6 @@ const std::vector<std::string> PATHS = {
     "C:\\Windows\\Prefetch\\LEAGUE*.*",
     "C:\\Windows\\Prefetch\\RIOT*.*"
 };
-
-// Drives to check
-const std::vector<std::string> DRIVES = { "C", "D", "E" };
 
 void stopProcesses() {
     std::vector<std::string> processes = {
@@ -73,7 +83,9 @@ void cleanLogs(bool deleteConfig) {
     setColor(COLOR_WHITE);
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
-    for (const auto& drive : DRIVES) {
+    std::vector<std::string> drives = getAvailableDrives();
+
+    for (const auto& drive : drives) {
         for (const auto& path : PATHS) {
             std::string fullPath = drive + ":\\" + path;
             fullPath = expandEnvironmentVariables(fullPath);
