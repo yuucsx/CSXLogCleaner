@@ -39,7 +39,7 @@ std::vector<std::string> getAvailableDrives() {
 }
 
 const std::vector<std::string> PATHS = {
-    "%userprofile%\\AppData\\Local\\Riot Games",
+    "%USERPROFILE%\\AppData\\Local\\Riot Games",
     "%ProgramData%\\Riot Games",
     "%USERPROFILE%\\Documents\\League of Legends\\Highlights",
     "Riot Games\\League of Legends\\Config",
@@ -85,11 +85,9 @@ void cleanLogs(bool deleteConfig) {
 
     std::vector<std::string> drives = getAvailableDrives();
 
-    for (const auto& drive : drives) {
-        for (const auto& path : PATHS) {
-            std::string fullPath = drive + ":\\" + path;
-            fullPath = expandEnvironmentVariables(fullPath);
-
+    for (const auto& path : PATHS) {
+        if (path.find('%') != std::string::npos || (path.size() >= 2 && path[1] == ':')) {
+            std::string fullPath = expandEnvironmentVariables(path);
             if (std::filesystem::exists(fullPath)) {
                 setColor(COLOR_CYAN);
                 std::cout << "[-] Deleting: " << fullPath << std::endl;
@@ -109,9 +107,36 @@ void cleanLogs(bool deleteConfig) {
                 }
             }
         }
+        else {
+            for (const auto& drive : drives) {
+                std::string fullPath = drive + ":\\" + path;
+                fullPath = expandEnvironmentVariables(fullPath);
 
-        if (deleteConfig) {
-            std::string configPath = drive + ":\\Riot Games\\League of Legends\\Config";
+                if (std::filesystem::exists(fullPath)) {
+                    setColor(COLOR_CYAN);
+                    std::cout << "[-] Deleting: " << fullPath << std::endl;
+                    setColor(COLOR_WHITE);
+                    try {
+                        if (std::filesystem::is_directory(fullPath)) {
+                            std::filesystem::remove_all(fullPath);
+                        }
+                        else {
+                            std::filesystem::remove(fullPath);
+                        }
+                    }
+                    catch (const std::filesystem::filesystem_error& e) {
+                        setColor(COLOR_RED);
+                        std::cerr << "[!] Error deleting " << fullPath << ": " << e.what() << std::endl;
+                        setColor(COLOR_WHITE);
+                    }
+                }
+            }
+        }
+    }
+
+    if (deleteConfig) {
+        for (const auto& path : drives) {
+            std::string configPath = path + ":\\Riot Games\\League of Legends\\Config";
             if (std::filesystem::exists(configPath)) {
                 setColor(COLOR_YELLOW);
                 std::cout << "[-] Deleting Config files in: " << configPath << std::endl;
